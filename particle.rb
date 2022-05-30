@@ -1,0 +1,225 @@
+require "matrix"
+
+#for testing purposes
+require_relative './test_functions.rb'
+
+
+class Particle
+  @@fitness = nil
+  @@bestpos = nil
+  @@inertial_constant = 0.95
+  @@local_weight = 0.5
+  @@collective_weight = 0.5
+    
+    
+  def initialize
+    @lolimit = nil
+    @hilimit = nil
+    @position = nil
+    @fitness = nil # initialise with no defined fitness
+    @bestfit = nil
+    @bestpos = nil
+  end
+
+
+  
+  def seed(position)
+    # Check that the passed argument is an vector
+    if (!position.is_a?(Vector))
+      puts("ERROR: attempt to assign particle position with non-vector type.")
+      exit(1)
+    end
+    
+    # Check that all elements in the vector are numeric
+    if(!position.is_a?(Integer) && !position.is_a?(Float))
+      position.each {|p|
+        if (!(p.is_a?(Integer) || p.is_a?(Float)))
+          puts("ERROR: attempt to assign particle position with non-numeric vector element.")
+          puts(position)
+          exit(1)
+        end
+      }
+    end
+    
+    # If we get here, we are good to seed
+    @position = position
+  end
+
+  
+  def setlolimit(position)
+    
+    # Check that the passed argument is an vector
+    if (!position.is_a?(Vector))
+      puts("ERROR: attempt to assign particle lo limit with non-vector type.")
+      exit(1)
+    end
+    
+    # Check that all elements in the vector are numeric
+    if(!position.is_a?(Integer) && !position.is_a?(Float))
+      position.each {|p|
+        if (!(p.is_a?(Integer) || p.is_a?(Float)))
+          puts("ERROR: attempt to assign particle lo limit with non-numeric vector element.")
+          puts(position)
+          exit(1)
+        end
+      }
+    end
+    
+    # If we get here, we are good to set
+    @lolimit = position
+  end
+
+
+  
+  def sethilimit(position)
+    
+    # Check that the passed argument is an vector
+    if (!position.is_a?(Vector))
+      puts("ERROR: attempt to assign particle hi limit with non-vector type.")
+      exit(1)
+    end
+    
+    # Check that all elements in the vector are numeric
+    if(!position.is_a?(Integer) && !position.is_a?(Float))
+      position.each {|p|
+        if (!(p.is_a?(Integer) || p.is_a?(Float)))
+          puts("ERROR: attempt to assign particle hi limit with non-numeric vector element.")
+          puts(position)
+          exit(1)
+        end
+      }
+    end
+    
+    # If we get here, we are good to set
+    @hilimit = position
+  end
+
+  def randomize()
+    if(@lolimit.nil?)
+      puts("ERROR: trying to randomize a particle before setting lo limits.")
+      exit(1)
+    end
+
+    if(@hilimit.nil?)
+      puts("ERROR: trying to randomize a particle before setting hi limits.")
+      exit(1)
+    end
+
+    if(@lolimit.size() != @hilimit.size())
+      puts("ERROR: unequal limit length, cannot determine spatial dimensions.")
+      exit(1)
+    end
+
+    # if we get here, all is good.  Randomize.
+
+    @position = Vector[@lolimit.size(),0.0]
+
+    @position.to_a().each_index do |i|
+      @position[i] = rand(@lolimit[i]..@hilimit[i])
+    end
+
+    @velocity = Vector[@lolimit.size(),0.0]
+    
+    @velocity.to_a().each_index do |i|
+      @velocity[i] = rand(-(@hilimit[i] - @lolimit[i])/2 .. (@hilimit[i] - @lolimit[i])/2)
+    end
+
+    # Finally, evaluate the position 
+    self.evaluate()
+    
+  end
+  
+    
+  def evaluate()
+   # @response = IO.popen(['date']) { |io|
+   #   io.read.chomp
+   # }
+
+    @response = rosenbrock_test(@position)
+    
+    #explicitly convert this into a number?  needs to be tested
+   
+    if (@response.is_a?(Integer) || @response.is_a?(Float))
+      @fitness = @response
+    else
+      puts("ERROR: Non-numeric evaluation result for particle.")
+      puts(self.inspect)
+      puts("Result obtained:")
+      puts(@response)
+      exit(1)
+    end
+
+    
+    # if this result is better than our fitness, update our fitness
+    if(@bestfit != nil)
+      if(@response < @bestfit)
+        @bestfit = @response
+        @bestpos = @position
+      end
+    else
+      @bestfit = @response
+      @bestpos = @position
+    end 
+    
+    # if this result is better than any particle fitness, update that too
+    if(@@fitness != nil)
+      if(@response < @@fitness)
+        @@fitness = @response
+        @@bestpos = @position
+        self.reportImprovement()
+      end
+    else      
+      @@fitness = @response
+      @@bestpos = @position
+      self.reportImprovement()
+    end
+  end
+
+  def reportImprovement()
+      puts("Global improvement:")
+      puts("   " + @response.to_s())
+      puts("   " + @response.to_s())
+  end
+
+  
+  def move()
+    @position = @position + @velocity
+
+    #if we hit the limits, move the position to the edge of the limit zone
+
+    @position.to_a().each_index { |i|
+      if @position[i] > @hilimit[i]
+        @position[i] = @hilimit[i]
+      end
+
+      if @position[i] < @lolimit[i]
+        @position[i] = @lolimit[i]
+      end
+
+      # Evaluate new position
+      self.evaluate()
+    }
+  end
+
+  def accelerate()
+    r1 = rand(0.0..1.0)
+    r2 = rand(0.0..1.0)
+
+    
+    @velocity.to_a().each_index do |i|
+      @velocity[i] = @@inertial_constant * @velocity[i] + @@local_weight * r1 * (@bestpos[i] - @position[i]) + @@collective_weight * r2 * (@@bestpos[i] - @position[i])
+    end
+  end
+
+  def globalPos()
+    @@bestpos
+  end
+
+  def globalFitness()
+    @@fitness
+  end
+  
+  attr_reader :position, :fitness
+end
+
+
