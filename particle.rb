@@ -1,5 +1,7 @@
 require "matrix"
 
+require_relative './sandmanLauncher.rb'
+
 #for testing purposes
 require_relative './test_functions.rb'
 
@@ -112,13 +114,15 @@ class Particle
 
     # if we get here, all is good.  Randomize.
 
-    @position = Vector[@lolimit.size(),0.0]
-
+    zeros = Array.new(@lolimit.size(),0.0)
+    
+    @position = Vector.elements(zeros, true)
+    
     @position.to_a().each_index do |i|
       @position[i] = rand(@lolimit[i]..@hilimit[i])
     end
 
-    @velocity = Vector[@lolimit.size(),0.0]
+    @velocity = Vector.elements(zeros, true)
     
     @velocity.to_a().each_index do |i|
       @velocity[i] = rand(-(@hilimit[i] - @lolimit[i])/2 .. (@hilimit[i] - @lolimit[i])/2)
@@ -131,13 +135,14 @@ class Particle
   
     
   def evaluate()
-   # @response = IO.popen(['date']) { |io|
-   #   io.read.chomp
-   # }
 
-    @response = rosenbrock_test(@position)
+    #@response = rosenbrock_test(@position)
+
+    @response = launchSandman(@position)
     
-    #explicitly convert this into a number?  needs to be tested
+    #explicitly convert this into a number
+    #The optimiser is a minimiser, so make flux negative
+    @response = -@response.to_f()
    
     if (@response.is_a?(Integer) || @response.is_a?(Float))
       @fitness = @response
@@ -178,7 +183,7 @@ class Particle
   def reportImprovement()
       puts("Global improvement:")
       puts("   " + @response.to_s())
-      puts("   " + @response.to_s())
+      puts("   " + @position.to_s())
   end
 
   
@@ -195,10 +200,9 @@ class Particle
       if @position[i] < @lolimit[i]
         @position[i] = @lolimit[i]
       end
-
-      # Evaluate new position
-      self.evaluate()
     }
+    # Evaluate new position
+    self.evaluate()
   end
 
   def accelerate()
