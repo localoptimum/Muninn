@@ -29,7 +29,7 @@ pso.rb is an executable script, like a bash script.  It points to
 ```
 ./pso.rb
 ```
-and it will run your optimisation job.
+and it will run your optimisation job.  There are a few preparation steps.
 
 ### Step 1
 You need to customise pso.rb to create the two vectors containing 
