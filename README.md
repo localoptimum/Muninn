@@ -22,6 +22,30 @@ Famous alternatives to PSO include:
 
 PSO is really easy to code, understand, and work with.
 
+## Like, how easy?
+
+pso.rb is an executable script, like a bash script.  It points to 
+#!/usr/bin/ruby.  You can just do:
+```
+./pso.rb
+```
+and it will run your optimisation job.
+
+### Step 1
+You need to customise pso.rb to create the two vectors containing 
+the parameter space limits (one vector of low values, one vector
+of high values.  pso.rb then just creates a swarm.
+
+### Step 2
+Customise swarm.rb if you want to change the swarm size or the
+number of iterations (probably not necessary really).
+
+### Step 3
+Customize the "evaluate()" function in particle.rb, to call whatever
+simulation you want to optimise.  An example is used that will
+run a [sandman](https://github.com/localoptimum/sandman) raytracing simulation on the gpu.
+
+
 
 ## Why Ruby?
 
