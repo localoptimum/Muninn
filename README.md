@@ -25,7 +25,8 @@ PSO is really easy to code, understand, and work with.
 ## Like, how easy?
 
 pso.rb is an executable script, like a bash script.  It points to 
-#!/usr/bin/ruby.  You can just do:
+#!/usr/bin/ruby on my machine, check that on your installation and then 
+you can just do:
 ```
 ./pso.rb
 ```
