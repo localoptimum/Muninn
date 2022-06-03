@@ -44,14 +44,19 @@ number of iterations (probably not necessary really).
 Customize the "evaluate()" function in particle.rb, to call whatever
 simulation you want to optimise.  An example is used that will
 run a [sandman](https://github.com/localoptimum/sandman) raytracing simulation on the gpu.
-
+You could just as easily use sandmanLauncher.rb as a template to
+call a vitess pipe, assemble PHITS or MCNP inputs, or run mcstas, geant4 etc.
 
 
 ## Why Ruby?
 
-Multiple early versions of this PSO code were written in C++ and
-Mathematica.  I rewrote it in Ruby because:
+Early versions of this PSO code were written in C++ and
+Mathematica for problems I was working on at the time.  
+I rewrote it in Ruby recently because:
 
+* I wanted a simpler interface to launching the GPU code than I had for a new neutron optics optimisation project
+* Since starting using [metasploit](https://www.metasploit.com) a few months back, I have been encouraging myself to turn to Ruby as much as I can for software problems so I'm more familiar with it.
+* I like ruby a hell of a lot more than I like python (yuck).
 * The search algorithm itself doesn't need to run on-the-metal fast.
   The speed bottleneck is the external monte-carlo evaluation, and
   since I plan to do that on a single nvidia GPU the search algorithm
@@ -60,8 +65,6 @@ Mathematica.  I rewrote it in Ruby because:
   it's a couple of lines of code.
 * Scripting languages are simpler for rapid geometry testing and
   checking, because you don't need to keep compiling all the time.
-* I like ruby a hell of a lot more than I like python (yuck).
-* I wanted a simpler interface to launching the GPU code than I had.
   
 
 # References
