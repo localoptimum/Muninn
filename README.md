@@ -67,11 +67,11 @@ Mathematica.  I rewrote it in Ruby because:
 # References
 
 1. [(Kennedy, Eberhart) Original PSO paper](https://doi.org/10.1109%2FICNN.1995.488968)
-2. [(me and Andersen) PSO applied to focussing Neutron
+2. [Me and Andersen: PSO applied to focussing Neutron
    Optics](https://doi.org/10.1107/S0021889809003483)
-3. [(Beecham et al) PSO used to design a magnetic
+3. [Beecham et al: PSO used to design a magnetic
    field](https://doi.org/10.1016/j.physb.2010.11.054)
-4. [Di Julio et al) PSO used on more complex optics and compared to other
+4. [Di Julio et al: PSO used on more complex optics and compared to other
    algorithms](https://doi.org/10.1088/1742-6596/528/1/012006)
-5. [(me, with some help from Filges) PSO used to design the ESS
+5. [Me, with some simulation help and knowledge from Filges: PSO used to design the ESS
    layout](https://doi.org/10.1088/2399-6528/ab8782)
