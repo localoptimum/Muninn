@@ -45,6 +45,7 @@ class Particle
     
     # If we get here, we are good to seed
     @position = position
+    self.evaluate()
   end
 
   
@@ -136,13 +137,13 @@ class Particle
     
   def evaluate()
 
-    #@response = rosenbrock_test(@position)
+    @response = rosenbrock_test(@position)
 
-    @response = launchSandman(@position)
-    
-    #explicitly convert this into a number
-    #The optimiser is a minimiser, so make flux negative
-    @response = -@response.to_f()
+    # neutron optics simulation
+    #@response = launchSandman(@position)    
+    # explicitly convert this into a number
+    # This optimiser is a minimiser, so make flux negative
+    #@response = -@response.to_f()
    
     if (@response.is_a?(Integer) || @response.is_a?(Float))
       @fitness = @response
@@ -206,13 +207,13 @@ class Particle
   end
 
   def accelerate()
+    # Two pseudo-random weighting factors
     r1 = rand(0.0..1.0)
     r2 = rand(0.0..1.0)
 
+    # Damped acceleration towards the two points
+    @velocity = @@inertial_constant * @velocity + @@local_weight * r1 * (@bestpos - @position) + @@collective_weight * r2 * (@@bestpos - @position)
     
-    @velocity.to_a().each_index do |i|
-      @velocity[i] = @@inertial_constant * @velocity[i] + @@local_weight * r1 * (@bestpos[i] - @position[i]) + @@collective_weight * r2 * (@@bestpos[i] - @position[i])
-    end
   end
 
   def globalPos()

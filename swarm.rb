@@ -4,7 +4,7 @@ require_relative './particle.rb'
 
 class Swarm    
 
-  def initialize(lolims, hilims)
+  def initialize(lolims, hilims, seedpos=nil)
 
     @nparticles = 30
     @niterations = 300
@@ -41,13 +41,24 @@ class Swarm
       @particles[p].sethilimit(hilims)
       @particles[p].randomize()
     }
+
+    if(seedpos != nil)
+      # user gave a seed position, check it then copy it
+      if seedpos.size() != lolims.size()
+        puts("ERROR: seed position and limits vector sizes do not match.")
+        exit(1)
+      end
+      @particles[0].seed(seedpos)
+    end
         
     for itr in 1..@niterations do
+      puts("Iteration " + itr.to_s())
       @particles.each_index { |p|
         @particles[p].move()
-        @particles[p].accelerate() 
+        @particles[p].accelerate()
+        #puts("   particle " + p.to_s())
+        #puts(@particles[p].inspect())
       }
-      puts("Iteration " + itr.to_s())
     end
 
     @gbest = @particles[0].globalFitness()
