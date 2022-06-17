@@ -77,4 +77,4 @@ I rewrote it in Ruby recently because:
    field](https://doi.org/10.1016/j.physb.2010.11.054)
 4. [Di Julio et al: PSO used on more complex optics and compared to other
    algorithms](https://doi.org/10.1088/1742-6596/528/1/012006)
-5. [Me, with some simulation help and knowledge from Filges: PSO used to design layout of the ESS](https://doi.org/10.1088/2399-6528/ab8782).  You can see in that paper the instruments are largely [placed in the same locations as appears now](https://europeanspallationsource.se/instruments) (there were some minor changes) 
+5. [Me, with some simulation help and knowledge from Filges: PSO used to design layout of the ESS](https://doi.org/10.1088/2399-6528/ab8782).  You can see in that paper the [instrument locations mostly match their true placements now](https://europeanspallationsource.se/instruments) (there were some minor changes) 
