@@ -77,5 +77,4 @@ I rewrote it in Ruby recently because:
    field](https://doi.org/10.1016/j.physb.2010.11.054)
 4. [Di Julio et al: PSO used on more complex optics and compared to other
    algorithms](https://doi.org/10.1088/1742-6596/528/1/012006)
-5. [Me, with some simulation help and knowledge from Filges: PSO used to design the ESS
-   layout](https://doi.org/10.1088/2399-6528/ab8782)
+5. [Me, with some simulation help and knowledge from Filges: PSO used to design layout of the ESS](https://doi.org/10.1088/2399-6528/ab8782)
